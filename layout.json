@@ -1,0 +1,39 @@
+{
+  "Background": {
+    "Image": {
+      "X": 0,
+      "Y": 0,
+      "ImageIndex": 0
+    }
+  },
+  "Time": {
+    "Hours": {
+      "Tens": {
+        "X": 30,
+        "Y": 10,
+        "ImageIndex": 50,
+        "ImagesCount": 10
+      },
+      "Ones": {
+        "X": 94,
+        "Y": 10,
+        "ImageIndex": 40,
+        "ImagesCount": 10
+      }
+    },
+    "Minutes": {
+      "Tens": {
+        "X": 108,
+        "Y": 10,
+        "ImageIndex": 1,
+        "ImagesCount": 10
+      },
+      "Ones": {
+        "X": 122,
+        "Y": 10,
+        "ImageIndex": 1,
+        "ImagesCount": 10
+      }
+    }
+  }
+}
