@@ -7,6 +7,20 @@ def copy_image_to_index(img, idx, move=False):
     cmd = "mv" if move else "cp"
     os.system(cmd + " " + img + " out/" + out + ".png")
 
+def make_text_image(text, size, color):
+    out = text + ".png"
+    if os.path.exists(out):
+        return
+    font_face = "AvantGarde-Book"
+    cmd = ("convert "
+           "-size x" + str(size) + " "
+           "xc:black -font " + font_face + " "
+           # "-pointsize " + str(FONT_SIZE) + " "
+           " -stroke " + color + " -fill " + color + " "
+           "label:" + text + " "
+           "" + out)
+    os.system(cmd)
+
 def digit_images(idx):
     lines = 6
     # Command-line API: '1' as 2nd arg means use an offset,
