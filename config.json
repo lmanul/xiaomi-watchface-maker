@@ -1,4 +1,6 @@
 {
   "font": "Montaga",
-  "time_font_size": 50
+  "time_font_size": 50,
+  "time_x": 30,
+  "time_y": 40
 }

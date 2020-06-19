@@ -56,10 +56,10 @@ def digit_images(idx, font, size):
 def replace_layout_value(key, val, layout_string):
     return layout_string.replace("{{" + key + "}}", str(val))
 
-def set_coordinates(layout_string):
+def set_coordinates(layout_string, config):
     (w, h) = get_image_dimensions("out/0001.png")
-    x = 20
-    y = 30
+    x = config["time_x"]
+    y = config["time_y"]
     out = layout_string
     i = 0
     while i < len(LAYOUT_KEYS):
@@ -96,12 +96,12 @@ if __name__ == "__main__":
         config = json.loads(f.read())
 
     copy_image_to_index("background/background.png", 0)
-    digit_images(1, config['font'], int(config["time_font_size"]))
+    digit_images(1, config['font'], config["time_font_size"])
 
     with open("layout.json") as f:
         layout_template = f.read()
         f.close()
-    layout = set_coordinates(layout_template)
+    layout = set_coordinates(layout_template, config)
     with open("out/layout.json", "w") as o:
         o.write(layout)
         o.close()
