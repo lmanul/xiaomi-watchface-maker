@@ -60,6 +60,10 @@ def set_coordinates(layout_string, config):
     (w, h) = get_image_dimensions("out/0001.png")
     x = config["time_x"]
     y = config["time_y"]
+    if x == "center":
+        x = int((config["screen_width"] - 4 * w) / 2)
+    if y == "center":
+        y = int((config["screen_height"] - h) / 2)
     out = layout_string
     i = 0
     while i < len(LAYOUT_KEYS):
