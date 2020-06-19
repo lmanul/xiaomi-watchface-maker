@@ -9,28 +9,28 @@
   "Time": {
     "Hours": {
       "Tens": {
-        "X": 30,
-        "Y": 10,
-        "ImageIndex": 50,
+        "X": {{time_hour_tens_x}},
+        "Y": {{time_hour_tens_y}},
+        "ImageIndex": 1,
         "ImagesCount": 10
       },
       "Ones": {
-        "X": 94,
-        "Y": 10,
-        "ImageIndex": 40,
+        "X": {{time_hour_ones_x}},
+        "Y": {{time_hour_ones_y}},
+        "ImageIndex": 1,
         "ImagesCount": 10
       }
     },
     "Minutes": {
       "Tens": {
-        "X": 108,
-        "Y": 10,
+        "X": {{time_minutes_tens_x}},
+        "Y": {{time_minutes_tens_y}},
         "ImageIndex": 1,
         "ImagesCount": 10
       },
       "Ones": {
-        "X": 122,
-        "Y": 10,
+        "X": {{time_minutes_ones_x}},
+        "Y": {{time_minutes_ones_y}},
         "ImageIndex": 1,
         "ImagesCount": 10
       }
