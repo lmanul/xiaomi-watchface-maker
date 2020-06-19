@@ -48,9 +48,9 @@ def make_text_image(text, font, size, color):
     os.system("optipng -quiet " + out)
     return out
 
-def digit_images(idx, font):
+def digit_images(idx, font, size):
     for i in range(10):
-        img = make_text_image(str(i), font, 20, "white")
+        img = make_text_image(str(i), font, size, "white")
         copy_image_to_index(img, idx + i, move=False)
 
 def replace_layout_value(key, val, layout_string):
@@ -58,16 +58,14 @@ def replace_layout_value(key, val, layout_string):
 
 def set_coordinates(layout_string):
     (w, h) = get_image_dimensions("out/0001.png")
-    x = 0
-    y = 0
+    x = 20
+    y = 30
     out = layout_string
     i = 0
     while i < len(LAYOUT_KEYS):
-        print(i)
         key = LAYOUT_KEYS[i]
         out = replace_layout_value(key, x, out)
         i += 1
-        print(i)
         key = LAYOUT_KEYS[i]
         out = replace_layout_value(key, y, out)
         x += w
@@ -98,7 +96,7 @@ if __name__ == "__main__":
         config = json.loads(f.read())
 
     copy_image_to_index("background/background.png", 0)
-    digit_images(1, config['font'])
+    digit_images(1, config['font'], 50)
 
     with open("layout.json") as f:
         layout_template = f.read()
