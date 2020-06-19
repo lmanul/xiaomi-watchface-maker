@@ -4,5 +4,6 @@
   "font": "Montaga",
   "time_font_size": 70,
   "time_x": "center",
-  "time_y": "center"
+  "time_y": "center",
+  "version": "0.1"
 }

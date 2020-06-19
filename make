@@ -93,6 +93,9 @@ def cleanup_and_init():
         os.mkdir("out")
     os.system("rm -f *.png")
 
+def package_watchface():
+    os.system("wine tools/WatchFace.exe out")
+
 if __name__ == "__main__":
     cleanup_and_init()
 
@@ -109,7 +112,9 @@ if __name__ == "__main__":
     with open("out/layout.json", "w") as o:
         o.write(layout)
         o.close()
+    os.system("echo '" + str(config["version"]) + "' > out/version")
 
+    package_watchface()
     #weather_images(100)
     #battery_images(200)
     os.system("rm -f *.png")
