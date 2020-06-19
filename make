@@ -96,7 +96,7 @@ if __name__ == "__main__":
         config = json.loads(f.read())
 
     copy_image_to_index("background/background.png", 0)
-    digit_images(1, config['font'], 50)
+    digit_images(1, config['font'], int(config["time_font_size"]))
 
     with open("layout.json") as f:
         layout_template = f.read()
