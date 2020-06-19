@@ -1,8 +1,6 @@
 #!/usr/bin/python3
 
-import datetime
 import os
-import pytz
 import sys
 
 margin_v = 3
@@ -10,28 +8,14 @@ font_height_px = 19
 FONT_WIDTH_PX = 11
 FONT_SIZE = 19
 HIGHLIGHTED_ROW_INDEX = 2
-TZ_TEXT_IMG_WIDTH_PX = 48
 
-TZ = [
-    ["America/Los_Angeles", "Sfo"],
-    ["America/New_York", "Nyc"],
-    ["Etc/UTC", "Utc"],
-    ["Europe/Paris", "Par"],
-    ["Asia/Shanghai", "Sha"],
-    ["Asia/Tokyo", "Tok"],
-]
-
-def get_hour_diff_for_tz(tz):
-    now = datetime.datetime.now(pytz.timezone(tz))
-    return int(now.utcoffset().total_seconds() / 60 / 60)
-
-def make_text_image(text):
+def make_text_image(text, width):
     out = text + ".png"
     if os.path.exists(out):
         return
     font_face = "AvantGarde-Book"
     cmd = ("convert "
-           "-size " + str(TZ_TEXT_IMG_WIDTH_PX) + "x" + ""
+           "-size " + str(width) + "x" + ""
            "" + str(font_height_px) + " "
            "xc:black -font " + font_face + " "
            "-pointsize " + str(FONT_SIZE) + " "
@@ -40,40 +24,13 @@ def make_text_image(text):
            "' " + out)
     os.system(cmd)
 
-def make_digits(digits, with_tz=False, adjusted=False):
-    # with_z means this is the "tens" of the hour
-    # adjusted means this is the "ones" of the hour
-    if with_tz:
-        for tz in TZ:
-            make_text_image(tz[1])
+def make_digits(digits):
     imgs = []
     for i in range(len(digits)):
         d = digits[i]
         img = "digits/" + d + ".png"
-        if adjusted:
-            tz_id = TZ[i][0]
-            tz_name = TZ[i][1]
-            d_int = int(d)
-            offset = get_hour_diff_for_tz(tz_id)
-            new_d_int = d_int + offset
-            if new_d_int < 0:
-                new_d_int += 24
-            if new_d_int >= 24:
-                new_d_int -= 24
-            # We just want the second digit at this point
-            while new_d_int >= 10:
-                new_d_int -= 10
-            img = "digits/" + str(new_d_int) + ".png"
 
-        if with_tz:
-            out = d + "_" + tz_name + ".png"
-            cmd = ("montage -background none "
-                   "-geometry +0+0 "
-                   "-tile 2x1 " + tz_name + ".png " + img + " " + out)
-            os.system(cmd)
-            img = out
-
-        if not with_tz and i == HIGHLIGHTED_ROW_INDEX:
+        if i == HIGHLIGHTED_ROW_INDEX:
             img = img.replace(".png", "_red.png")
         imgs.append(img)
 
@@ -86,14 +43,4 @@ def make_digits(digits, with_tz=False, adjusted=False):
 
 if __name__ == "__main__":
     digits = sys.argv[1]
-    adjusted = False
-    tz = len(sys.argv) > 2
-    if tz:
-        key = int(sys.argv[2])
-        if key == 2:
-            tz = True
-            adjusted = True
-        elif key == 1:
-            tz = False
-            adjusted = True
-    make_digits(digits, with_tz=tz, adjusted=adjusted)
+    make_digits(digits)
