@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+import json
 import os
 
 def copy_image_to_index(img, idx, move=False):
@@ -7,30 +8,25 @@ def copy_image_to_index(img, idx, move=False):
     cmd = "mv" if move else "cp"
     os.system(cmd + " " + img + " out/" + out + ".png")
 
-def make_text_image(text, size, color):
+def make_text_image(text, font, size, color):
     out = text + ".png"
-    if os.path.exists(out):
-        return
-    font_face = "AvantGarde-Book"
+    # if os.path.exists(out):
+        # return
     cmd = ("convert "
-           "-size x" + str(size) + " "
-           "xc:black -font " + font_face + " "
-           # "-pointsize " + str(FONT_SIZE) + " "
-           " -stroke " + color + " -fill " + color + " "
+           "-background black "
+           "-font " + font + " "
+           "-pointsize " + str(size) + " "
+           "-fill " + color + " "
            "label:" + text + " "
            "" + out)
     os.system(cmd)
+    os.system("optipng -quiet " + out)
+    return out
 
-def digit_images(idx):
-    lines = 6
-    # Command-line API: '1' as 2nd arg means use an offset,
-    # '2' means use an offset and include the timezone name
+def digit_images(idx, font):
     for i in range(10):
-        os.system("./mkdigitcolumn " + str(i) * lines)
-        copy_image_to_index("out.png", idx + i, move=True)
-
-def digit_images_with_tz(idx):
-    digit_images(idx)
+        img = make_text_image(str(i), font, 20, "white")
+        copy_image_to_index(img, idx + i, move=False)
 
 def weather_images(idx):
     weather_imgs = sorted(["weather/" + f for f in os.listdir("weather/")])
@@ -43,15 +39,20 @@ def battery_images(idx):
         copy_image_to_index(battery_imgs[i], idx + i)
 
 if __name__ == "__main__":
-    os.system("rm -rf out")
+    if os.path.exists("out"):
+        os.system("rm -rf out/*")
+    else:
+        os.mkdir("out")
     os.system("rm -f *.png")
-    os.mkdir("out")
+
+    with open("config.json") as f:
+        config = json.loads(f.read())
+    print(config)
 
     os.system("cp layout.json out/")
     copy_image_to_index("background/background.png", 0)
 
-    digit_images(1)
-    digit_images_with_tz(50)
+    digit_images(1, config['font'])
     #weather_images(100)
     #battery_images(200)
     os.system("rm -f *.png")
