@@ -6,4 +6,4 @@ To run the Windows-based watchface packager, you'll need these:
 
 `sudo apt-get install wine winetricks`
 
-`winetricks dotnet45`
+`winetricks dotnet452`

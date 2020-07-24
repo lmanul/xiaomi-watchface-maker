@@ -95,9 +95,9 @@ def cleanup_and_init():
 
 def package_watchface():
     os.chdir("out")
-    os.system("map imgmkindexedpng *.png")
+    #os.system("map imgmkindexedpng *.png")
     os.chdir("..")
-    os.system("wine tools/WatchFace.exe out/layout.json")
+    os.system("wine tools/WatchFace.exe -size176 out/layout.json")
 
 if __name__ == "__main__":
     cleanup_and_init()
