@@ -51,7 +51,24 @@ def make_text_image(text, font, size, color):
 def digit_images(idx, font, size):
     for i in range(10):
         img = make_text_image(str(i), font, size, "white")
-        copy_image_to_index(img, idx + i, move=False)
+
+    imgs = [str(i) + ".png" for i in range(10)]
+
+    # Now we need to make sure that all digit images have the same width.
+    max_width = 0
+    for img in imgs:
+        max_width = max(max_width, get_image_dimensions(img)[0])
+    for img in imgs:
+        (w, h) = get_image_dimensions(img)
+        if w < max_width:
+            cmd = ("convert " + img + ""
+                   " -background black "
+                   "-gravity center "
+                   "-extent "+ str(max_width) + "x" + str(h) + " "
+                   "" + img + "")
+            os.system(cmd)
+    for i in range(10):
+        copy_image_to_index(str(i) + ".png", idx + i, move=False)
 
 def replace_layout_value(key, val, layout_string):
     return layout_string.replace("{{" + key + "}}", str(val))
@@ -117,7 +134,7 @@ if __name__ == "__main__":
         o.close()
     os.system("echo '" + str(config["version"]) + "' > out/version")
 
-    package_watchface()
+    #package_watchface()
     #weather_images(100)
     #battery_images(200)
     os.system("rm -f *.png")
