@@ -34,9 +34,10 @@ def copy_image_to_index(img, idx, move=False):
     os.system(cmd + " " + img + " out/" + out + ".png")
 
 def make_text_image(text, font, size, color):
-    out = text + ".png"
-    # if os.path.exists(out):
-        # return
+    if text == ":":
+        out = "ts.png"
+    else:
+        out = text + ".png"
     cmd = ("convert "
            "-background black "
            "-font " + font + " "
@@ -70,15 +71,19 @@ def digit_images(idx, font, size):
     for i in range(10):
         copy_image_to_index(str(i) + ".png", idx + i, move=False)
 
+def time_separator_image(font, size):
+    return make_text_image(":", font, size, "white")
+
 def replace_layout_value(key, val, layout_string):
     return layout_string.replace("{{" + key + "}}", str(val))
 
 def set_coordinates(layout_string, config):
     (w, h) = get_image_dimensions("out/0001.png")
+    (ts_w, _) = get_image_dimensions("ts.png")
     x = config["time_x"]
     y = config["time_y"]
     if x == "center":
-        x = int((config["screen_width"] - 4 * w) / 2)
+        x = int((config["screen_width"] - 4 * w - ts_w) / 2)
     if y == "center":
         y = int((config["screen_height"] - h) / 2)
     out = layout_string
@@ -90,6 +95,9 @@ def set_coordinates(layout_string, config):
         key = LAYOUT_KEYS[i]
         out = replace_layout_value(key, y, out)
         x += w
+        # After the hour, add space for the time separator
+        if key == "time_hour_ones_y":
+            x += ts_w
         i += 1
     return out
 
@@ -108,11 +116,10 @@ def cleanup_and_init():
         os.system("rm -rf out/*")
     else:
         os.mkdir("out")
-    os.system("rm -f *.png")
+    os.system("rm -f *.png *.bup")
 
 def package_watchface():
     os.chdir("out")
-    #os.system("map imgmkindexedpng *.png")
     os.chdir("..")
     os.system("wine tools/WatchFace.exe -size176 out/layout.json")
 
@@ -122,8 +129,22 @@ if __name__ == "__main__":
     with open("config.json") as f:
         config = json.loads(f.read())
 
-    copy_image_to_index("background/background.png", 0)
-    digit_images(1, config['font'], config["time_font_size"])
+    index = 0
+    FONT = config["font"]
+    TIME_FONT_SIZE = config["time_font_size"]
+
+    ts = time_separator_image(FONT, TIME_FONT_SIZE)
+    # We need to overlay the time separator onto the background.
+    os.system("convert "
+              "-gravity center "
+              "-composite "
+              "background/background.png " + ts + " "
+              "background.png")
+    copy_image_to_index("background.png", index)
+    index += 1
+
+    digit_images(index, FONT, TIME_FONT_SIZE)
+    index += 10
 
     with open("layout.json") as f:
         layout_template = f.read()
@@ -133,6 +154,7 @@ if __name__ == "__main__":
         o.write(layout)
         o.close()
     os.system("echo '" + str(config["version"]) + "' > out/version")
+    os.system("map imgmkindexedpng *.png")
 
     #package_watchface()
     #weather_images(100)
