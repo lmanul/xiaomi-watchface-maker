@@ -59,13 +59,7 @@ def make_text_image(text, font, size, color):
     os.system("optipng -quiet " + out)
     return out
 
-def digit_images(idx, font, size):
-    for i in range(10):
-        img = make_text_image(str(i), font, size, "white")
-
-    imgs = [str(i) + ".png" for i in range(10)]
-
-    # Now we need to make sure that all digit images have the same width.
+def equalize_images_width(imgs):
     max_width = 0
     for img in imgs:
         max_width = max(max_width, get_image_dimensions(img)[0])
@@ -78,16 +72,26 @@ def digit_images(idx, font, size):
                    "-extent "+ str(max_width) + "x" + str(h) + " "
                    "" + img + "")
             os.system(cmd)
+
+def digit_images(idx, font, size):
+    imgs = []
     for i in range(10):
-        copy_image_to_index(str(i) + ".png", idx + i, move=False)
+        imgs.append(make_text_image(str(i), font, size, "white"))
+
+    equalize_images_width(imgs)
+
+    for i, img in enumerate(imgs):
+        img = imgs[i]
+        copy_image_to_index(img, idx + i, move=False)
 
 def weekday_images(idx, font, size):
     imgs = []
-    for i in range(len(WEEKDAYS)):
-        imgs.append(make_text_image(WEEKDAYS[i], font, size, "white"))
+    for i, weekday in enumerate(WEEKDAYS):
+        imgs.append(make_text_image(weekday, font, size, "white"))
 
-    for i in range(len(imgs)):
-        img = imgs[i]
+    equalize_images_width(imgs)
+
+    for i, img in enumerate(imgs):
         copy_image_to_index(img, idx + i, move=False)
 
 def time_separator_image(font, size):
