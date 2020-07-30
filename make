@@ -6,6 +6,16 @@ import re
 import shlex
 import subprocess
 
+WEEKDAYS = [
+    "Mon",
+    "Tue",
+    "Wed",
+    "Thu",
+    "Fri",
+    "Sat",
+    "Sun",
+]
+
 LAYOUT_KEYS = [
     "time_hour_tens_x",
     "time_hour_tens_y",
@@ -71,6 +81,15 @@ def digit_images(idx, font, size):
     for i in range(10):
         copy_image_to_index(str(i) + ".png", idx + i, move=False)
 
+def weekday_images(idx, font, size):
+    imgs = []
+    for i in range(len(WEEKDAYS)):
+        imgs.append(make_text_image(WEEKDAYS[i], font, size, "white"))
+
+    for i in range(len(imgs)):
+        img = imgs[i]
+        copy_image_to_index(img, idx + i, move=False)
+
 def time_separator_image(font, size):
     return make_text_image(":", font, size, "white")
 
@@ -127,6 +146,7 @@ if __name__ == "__main__":
     index = 0
     FONT = config["font"]
     TIME_FONT_SIZE = config["time_font_size"]
+    WEEKDAY_FONT_SIZE = config["weekday_font_size"]
 
     ts = time_separator_image(FONT, TIME_FONT_SIZE)
     # We need to overlay the time separator onto the background.
@@ -141,6 +161,9 @@ if __name__ == "__main__":
 
     digit_images(index, FONT, TIME_FONT_SIZE)
     index += 10
+
+    weekday_images(index, FONT, WEEKDAY_FONT_SIZE)
+    index += 7
 
     with open("layout.json") as f:
         layout_template = f.read()

@@ -3,6 +3,7 @@
   "screen_height": 176,
   "font": "Montaga",
   "time_font_size": 65,
+  "weekday_font_size": 20,
   "time_x": "center",
   "time_y": "center",
   "version": "0.3"
