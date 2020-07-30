@@ -27,6 +27,8 @@ LAYOUT_KEYS = [
     "time_minutes_ones_y",
 ]
 
+PADDING = 5
+
 def get_image_dimensions(img):
     output = (
         subprocess.check_output(shlex.split("identify '" + img + "'"))
@@ -102,6 +104,8 @@ def replace_layout_value(key, val, layout_string):
 
 def set_coordinates(layout_string, config):
     (w, h) = get_image_dimensions("out/0001.png")
+
+    # Time
     (ts_w, _) = get_image_dimensions("ts.png")
     x = config["time_x"]
     y = config["time_y"]
@@ -122,6 +126,18 @@ def set_coordinates(layout_string, config):
         if key == "time_hour_ones_y":
             x += ts_w
         i += 1
+
+    # Weekdays
+    (w, h) = get_image_dimensions("out/0011.png")
+    x = config["weekday_x"]
+    y = config["weekday_y"]
+    if x == "left":
+        x = PADDING
+    if y == "bottom":
+        y = config["screen_height"] - h - PADDING
+    out = replace_layout_value("weekday_x", x, out)
+    out = replace_layout_value("weekday_y", y, out)
+
     return out
 
 def weather_images(idx):

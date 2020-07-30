@@ -35,5 +35,13 @@
         "ImagesCount": 10
       }
     }
+  },
+  "Date": {
+    "Weekday": {
+      "X": {{weekday_x}},
+      "Y": {{weekday_y}},
+      "ImageIndex": 11,
+      "ImagesCount": 7
+    }
   }
 }

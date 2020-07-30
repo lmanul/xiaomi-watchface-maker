@@ -6,5 +6,7 @@
   "weekday_font_size": 20,
   "time_x": "center",
   "time_y": "center",
+  "weekday_x": "left",
+  "weekday_y": "bottom",
   "version": "0.3"
 }
