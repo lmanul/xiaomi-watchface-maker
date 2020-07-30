@@ -42,6 +42,19 @@
       "Y": {{weekday_y}},
       "ImageIndex": 11,
       "ImagesCount": 7
-    }
+    },
+    "MonthAndDay": {
+      "Separate": {
+        "Day": {
+          "TopLeftX": {{date_x}},
+          "TopLeftY": {{date_y}},
+          "Alignment": "TopRight",
+          "Spacing": 0,
+          "ImageIndex": 18,
+          "ImagesCount": 10
+        }
+      },
+      "TwoDigitsDay": true
+    },
   }
 }

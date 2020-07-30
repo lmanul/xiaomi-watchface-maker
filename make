@@ -49,7 +49,7 @@ def make_text_image(text, font, size, color):
     if text == ":":
         out = "ts.png"
     else:
-        out = text + ".png"
+        out = text + "_" + str(size) + ".png"
     cmd = ("convert "
            "-background black "
            "-font " + font + " "
@@ -138,6 +138,17 @@ def set_coordinates(layout_string, config):
     out = replace_layout_value("weekday_x", x, out)
     out = replace_layout_value("weekday_y", y, out)
 
+    # Date
+    (w, h) = get_image_dimensions("out/0018.png")
+    x = config["date_x"]
+    y = config["date_y"]
+    if x == "right":
+        x = config["screen_width"] - 2 * w - PADDING
+    if y == "bottom":
+        y = config["screen_height"] - h - PADDING
+    out = replace_layout_value("date_x", x, out)
+    out = replace_layout_value("date_y", y, out)
+
     return out
 
 def weather_images(idx):
@@ -167,6 +178,7 @@ if __name__ == "__main__":
     FONT = config["font"]
     TIME_FONT_SIZE = config["time_font_size"]
     WEEKDAY_FONT_SIZE = config["weekday_font_size"]
+    DATE_FONT_SIZE = config["date_font_size"]
 
     ts = time_separator_image(FONT, TIME_FONT_SIZE)
     # We need to overlay the time separator onto the background.
@@ -184,6 +196,9 @@ if __name__ == "__main__":
 
     weekday_images(index, FONT, WEEKDAY_FONT_SIZE)
     index += 7
+
+    digit_images(index, FONT, DATE_FONT_SIZE)
+    index += 10
 
     with open("layout.json") as f:
         layout_template = f.read()

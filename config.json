@@ -3,10 +3,13 @@
   "screen_height": 176,
   "font": "Montaga",
   "time_font_size": 65,
-  "weekday_font_size": 25,
+  "weekday_font_size": 20,
+  "date_font_size": 20,
   "time_x": "center",
   "time_y": "center",
   "weekday_x": "left",
   "weekday_y": "bottom",
-  "version": "0.3"
+  "date_x": "right",
+  "date_y": "bottom",
+  "version": "0.4"
 }
