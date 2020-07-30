@@ -118,11 +118,6 @@ def cleanup_and_init():
         os.mkdir("out")
     os.system("rm -f *.png *.bup")
 
-def package_watchface():
-    os.chdir("out")
-    os.chdir("..")
-    os.system("wine tools/WatchFace.exe -size176 out/layout.json")
-
 if __name__ == "__main__":
     cleanup_and_init()
 
@@ -135,11 +130,12 @@ if __name__ == "__main__":
 
     ts = time_separator_image(FONT, TIME_FONT_SIZE)
     # We need to overlay the time separator onto the background.
-    os.system("convert "
-              "-gravity center "
-              "-composite "
-              "background/background.png " + ts + " "
-              "background.png")
+    cmd = ("convert "
+           "-gravity center "
+           "-composite "
+           "background/background.png " + ts + " "
+           "background.png")
+    os.system(cmd)
     copy_image_to_index("background.png", index)
     index += 1
 
@@ -156,7 +152,7 @@ if __name__ == "__main__":
     os.system("echo '" + str(config["version"]) + "' > out/version")
     os.system("map imgmkindexedpng *.png")
 
-    #package_watchface()
     #weather_images(100)
     #battery_images(200)
     os.system("rm -f *.png")
+    os.system("rm -f *.bup")
