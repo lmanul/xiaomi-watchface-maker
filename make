@@ -45,13 +45,13 @@ def copy_image_to_index(img, idx, move=False):
     cmd = "mv" if move else "cp"
     os.system(cmd + " " + img + " out/" + out + ".png")
 
-def make_text_image(text, font, size, color):
+def make_text_image(text, font, size, bgcolor, color):
     if text == ":":
         out = "ts.png"
     else:
         out = text + "_" + str(size) + ".png"
     cmd = ("convert "
-           "-background black "
+           "-background " + bgcolor + " "
            "-font " + font + " "
            "-pointsize " + str(size) + " "
            "-fill " + color + " "
@@ -61,7 +61,7 @@ def make_text_image(text, font, size, color):
     os.system("optipng -quiet " + out)
     return out
 
-def equalize_images_width(imgs):
+def equalize_images_width(imgs, BGCOLOR):
     max_width = 0
     for img in imgs:
         max_width = max(max_width, get_image_dimensions(img)[0])
@@ -69,35 +69,35 @@ def equalize_images_width(imgs):
         (w, h) = get_image_dimensions(img)
         if w < max_width:
             cmd = ("convert " + img + ""
-                   " -background black "
+                   " -background " + BGCOLOR + " "
                    "-gravity center "
                    "-extent "+ str(max_width) + "x" + str(h) + " "
                    "" + img + "")
             os.system(cmd)
 
-def digit_images(idx, font, size):
+def digit_images(idx, font, size, bgcolor, color):
     imgs = []
     for i in range(10):
-        imgs.append(make_text_image(str(i), font, size, "white"))
+        imgs.append(make_text_image(str(i), font, size, bgcolor, color))
 
-    equalize_images_width(imgs)
+    equalize_images_width(imgs, bgcolor)
 
     for i, img in enumerate(imgs):
         img = imgs[i]
         copy_image_to_index(img, idx + i, move=False)
 
-def weekday_images(idx, font, size):
+def weekday_images(idx, font, size, bgcolor, color):
     imgs = []
     for i, weekday in enumerate(WEEKDAYS):
-        imgs.append(make_text_image(weekday, font, size, "white"))
+        imgs.append(make_text_image(weekday, font, size, bgcolor, color))
 
-    equalize_images_width(imgs)
+    equalize_images_width(imgs, bgcolor)
 
     for i, img in enumerate(imgs):
         copy_image_to_index(img, idx + i, move=False)
 
-def time_separator_image(font, size):
-    return make_text_image(":", font, size, "white")
+def time_separator_image(font, size, bgcolor, color):
+    return make_text_image(":", font, size, bgcolor, color)
 
 def replace_layout_value(key, val, layout_string):
     return layout_string.replace("{{" + key + "}}", str(val))
@@ -179,8 +179,10 @@ if __name__ == "__main__":
     TIME_FONT_SIZE = config["time_font_size"]
     WEEKDAY_FONT_SIZE = config["weekday_font_size"]
     DATE_FONT_SIZE = config["date_font_size"]
+    BGCOLOR = config["background_color"]
+    FGCOLOR = config["foreground_color"]
 
-    ts = time_separator_image(FONT, TIME_FONT_SIZE)
+    ts = time_separator_image(FONT, TIME_FONT_SIZE, BGCOLOR, FGCOLOR)
     # We need to overlay the time separator onto the background.
     cmd = ("convert "
            "-gravity center "
@@ -191,13 +193,13 @@ if __name__ == "__main__":
     copy_image_to_index("background.png", index)
     index += 1
 
-    digit_images(index, FONT, TIME_FONT_SIZE)
+    digit_images(index, FONT, TIME_FONT_SIZE, BGCOLOR, FGCOLOR)
     index += 10
 
-    weekday_images(index, FONT, WEEKDAY_FONT_SIZE)
+    weekday_images(index, FONT, WEEKDAY_FONT_SIZE, BGCOLOR, FGCOLOR)
     index += 7
 
-    digit_images(index, FONT, DATE_FONT_SIZE)
+    digit_images(index, FONT, DATE_FONT_SIZE, BGCOLOR, FGCOLOR)
     index += 10
 
     with open("layout.json") as f:

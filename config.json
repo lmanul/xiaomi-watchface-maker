@@ -1,4 +1,6 @@
 {
+  "background_color": "black",
+  "foreground_color": "white",
   "screen_width": 176,
   "screen_height": 176,
   "font": "Montaga",
