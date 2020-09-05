@@ -21,14 +21,17 @@ if __name__ == "__main__":
     DATE_FONT_SIZE = CONFIG["date_font_size"]
     BGCOLOR = CONFIG["background_color"]
     FGCOLOR = CONFIG["foreground_color"]
+    SCREEN_W = CONFIG["screen_width"]
+    SCREEN_H = CONFIG["screen_height"]
 
+    common.make_rectangle(BGCOLOR, SCREEN_W, SCREEN_H, "blank.png")
     if DIGITAL:
         TS = digital.time_separator_image(FONT, TIME_FONT_SIZE, BGCOLOR, FGCOLOR)
         # We need to overlay the time separator onto the background.
         CMD = ("convert "
                "-gravity center "
                "-composite "
-               "background/background.png " + TS + " "
+               "blank.png " + TS + " "
                "background.png")
         os.system(CMD)
     common.copy_image_to_index("background.png", INDEX)

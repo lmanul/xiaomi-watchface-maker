@@ -26,6 +26,14 @@ def copy_image_to_index(img, idx, move=False):
     cmd = "mv" if move else "cp"
     os.system(cmd + " " + img + " out/" + out + ".png")
 
+def make_rectangle(color, w, h, out):
+    cmd = ("convert "
+           "-size " + str(w) + "x" + str(h) + " "
+           "xc:" + color + " "
+           "" + out)
+    print(cmd)
+    os.system(cmd)
+
 def make_text_image(text, font, size, bgcolor, color):
     if text == ":":
         out = "ts.png"
