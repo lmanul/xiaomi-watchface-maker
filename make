@@ -209,9 +209,9 @@ if __name__ == "__main__":
     with open("layout.json") as f:
         LAYOUT_TEMPLATE = f.read()
         f.close()
-    layout = set_coordinates(LAYOUT_TEMPLATE, CONFIG)
+    LAYOUT = set_coordinates(LAYOUT_TEMPLATE, CONFIG)
     with open("out/layout.json", "w") as o:
-        o.write(layout)
+        o.write(LAYOUT)
         o.close()
     os.system("echo '" + str(CONFIG["version"]) + "' > out/version")
     os.system("map imgmkindexedpng *.png")
