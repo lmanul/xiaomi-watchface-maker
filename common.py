@@ -31,7 +31,6 @@ def make_rectangle(color, w, h, out):
            "-size " + str(w) + "x" + str(h) + " "
            "xc:" + color + " "
            "" + out)
-    print(cmd)
     os.system(cmd)
 
 def make_text_image(text, font, size, bgcolor, color):
