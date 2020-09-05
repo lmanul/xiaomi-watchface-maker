@@ -5,6 +5,9 @@ import os
 import re
 import shlex
 import subprocess
+import sys
+
+PACKAGER_BIN = "../amazfitbiptools/WatchFace/bin/Release/WatchFace.exe"
 
 WEEKDAYS = [
     "Mon",
@@ -161,6 +164,13 @@ def battery_images(idx):
     for i in range(len(battery_imgs)):
         copy_image_to_index(battery_imgs[i], idx + i)
 
+def package_watchface(path_to_json):
+    if not os.path.exists(PACKAGER_BIN):
+        print("The packager binary is missing. Please follow instructions "
+              "in the 'README' file to produce it.")
+        sys.exit(1)
+    os.system("mono " + PACKAGER_BIN + " " + path_to_json)
+
 def cleanup_and_init():
     if os.path.exists("out"):
         os.system("rm -rf out/*")
@@ -214,5 +224,8 @@ if __name__ == "__main__":
 
     #weather_images(100)
     #battery_images(200)
+
+    package_watchface("out/layout.json")
+
     os.system("rm -f *.png")
     os.system("rm -f *.bup")
