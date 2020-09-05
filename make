@@ -86,7 +86,11 @@ def cleanup_and_init():
         os.system("rm -rf out/*")
     else:
         os.mkdir("out")
-    os.system("rm -f *.png *.bup")
+    to_delete = [
+        f for f in os.listdir(".") if f.endswith(".png") or f.endswith(".bup")]
+    if "preview.png" in to_delete:
+        to_delete.remove("preview.png")
+    os.system("rm -f " + " ".join(to_delete))
 
 if __name__ == "__main__":
     cleanup_and_init()
@@ -137,5 +141,6 @@ if __name__ == "__main__":
 
     package_watchface("out/layout.json")
 
-    os.system("rm -f *.png")
-    os.system("rm -f *.bup")
+    os.system("cp out/layout_packed_static.png preview.png")
+    os.system("mv out/layout_packed.bin watchface.bin")
+    cleanup_and_init()
