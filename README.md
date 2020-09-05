@@ -12,7 +12,7 @@ that's done, all the assets are in the `out` folder. To package that into a
 
 Get this repository:
 
-`git clone https://llmanull@bitbucket.org/valeronm/amazfitbiptools.git`
+`git clone https://bitbucket.org/llmanull/amazfitbiptools.git`
 
 Then we need Mono to compile it.
 
