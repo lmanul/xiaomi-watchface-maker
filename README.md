@@ -24,12 +24,9 @@ Then we need Mono to compile it.
 
 `sudo apt update && sudo apt install mono-complete monodevelop`
 
-Open the project in `monodevelop`:
+Now build the project:
 
-`monodevelop Amazfit.sln`
-
-* Switch from Debug to Release
-* Pick Build All
+`mdtool build --project:WatchFace --target:Build --configuration:Release`
 
 Then the executable can be run with `mono`:
 
