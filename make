@@ -5,6 +5,7 @@ import os
 
 import common
 import digital
+import layout_adapter
 
 if __name__ == "__main__":
     if not os.path.exists("out"):
@@ -49,14 +50,8 @@ if __name__ == "__main__":
         digital.digit_images(INDEX, FONT, DATE_FONT_SIZE, BGCOLOR, FGCOLOR)
         INDEX += 10
 
-    with open("layout.json") as f:
-        LAYOUT_TEMPLATE = f.read()
-        f.close()
-    if DIGITAL:
-        LAYOUT = digital.set_coordinates(LAYOUT_TEMPLATE, CONFIG)
-    with open("out/layout.json", "w") as o:
-        o.write(LAYOUT)
-        o.close()
+    layout_adapter.output_layout(CONFIG, "out/layout.json")
+
     os.system("echo '" + str(CONFIG["version"]) + "' > out/version")
     os.system("map imgmkindexedpng *.png")
 
