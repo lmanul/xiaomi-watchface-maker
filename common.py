@@ -2,10 +2,13 @@ import os
 import re
 import shlex
 import subprocess
+import sys
 
 WEEKDAYS = [
     "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun",
 ]
+
+PACKAGER_BIN = "../amazfitbiptools/WatchFace/bin/Release/WatchFace.exe"
 
 def get_image_dimensions(img):
     output = (
@@ -62,3 +65,29 @@ def weekday_images(idx, font, size, bgcolor, color):
 
     for i, img in enumerate(imgs):
         copy_image_to_index(img, idx + i, move=False)
+
+def weather_images(idx):
+    weather_imgs = sorted(["weather/" + f for f in os.listdir("weather/")])
+    for i in range(len(weather_imgs)):
+        copy_image_to_index(weather_imgs[i], idx + i)
+
+def battery_images(idx):
+    battery_imgs = sorted(["battery/" + f for f in os.listdir("battery/")])
+    for i in range(len(battery_imgs)):
+        copy_image_to_index(battery_imgs[i], idx + i)
+
+def package_watchface(path_to_json):
+    if not os.path.exists(PACKAGER_BIN):
+        print("The packager binary is missing. Please follow instructions "
+              "in the 'README' file to produce it.")
+        sys.exit(1)
+    os.system("mono " + PACKAGER_BIN + " " + path_to_json)
+
+def cleanup():
+    if os.path.exists("out"):
+        os.system("rm -rf out")
+    to_delete = [
+        f for f in os.listdir(".") if f.endswith(".png") or f.endswith(".bup")]
+    if "preview.png" in to_delete:
+        to_delete.remove("preview.png")
+    os.system("rm -f " + " ".join(to_delete))
