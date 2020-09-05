@@ -10,13 +10,7 @@ import sys
 PACKAGER_BIN = "../amazfitbiptools/WatchFace/bin/Release/WatchFace.exe"
 
 WEEKDAYS = [
-    "Mon",
-    "Tue",
-    "Wed",
-    "Thu",
-    "Fri",
-    "Sat",
-    "Sun",
+    "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun",
 ]
 
 LAYOUT_KEYS = [
@@ -64,7 +58,7 @@ def make_text_image(text, font, size, bgcolor, color):
     os.system("optipng -quiet " + out)
     return out
 
-def equalize_images_width(imgs, BGCOLOR):
+def equalize_images_width(imgs, bgcolor):
     max_width = 0
     for img in imgs:
         max_width = max(max_width, get_image_dimensions(img)[0])
@@ -72,7 +66,7 @@ def equalize_images_width(imgs, BGCOLOR):
         (w, h) = get_image_dimensions(img)
         if w < max_width:
             cmd = ("convert " + img + ""
-                   " -background " + BGCOLOR + " "
+                   " -background " + bgcolor + " "
                    "-gravity center "
                    "-extent "+ str(max_width) + "x" + str(h) + " "
                    "" + img + "")
@@ -182,44 +176,44 @@ if __name__ == "__main__":
     cleanup_and_init()
 
     with open("config.json") as f:
-        config = json.loads(f.read())
+        CONFIG = json.loads(f.read())
 
-    index = 0
-    FONT = config["font"]
-    TIME_FONT_SIZE = config["time_font_size"]
-    WEEKDAY_FONT_SIZE = config["weekday_font_size"]
-    DATE_FONT_SIZE = config["date_font_size"]
-    BGCOLOR = config["background_color"]
-    FGCOLOR = config["foreground_color"]
+    INDEX = 0
+    FONT = CONFIG["font"]
+    TIME_FONT_SIZE = CONFIG["time_font_size"]
+    WEEKDAY_FONT_SIZE = CONFIG["weekday_font_size"]
+    DATE_FONT_SIZE = CONFIG["date_font_size"]
+    BGCOLOR = CONFIG["background_color"]
+    FGCOLOR = CONFIG["foreground_color"]
 
     ts = time_separator_image(FONT, TIME_FONT_SIZE, BGCOLOR, FGCOLOR)
     # We need to overlay the time separator onto the background.
-    cmd = ("convert "
+    CMD = ("convert "
            "-gravity center "
            "-composite "
            "background/background.png " + ts + " "
            "background.png")
-    os.system(cmd)
-    copy_image_to_index("background.png", index)
-    index += 1
+    os.system(CMD)
+    copy_image_to_index("background.png", INDEX)
+    INDEX += 1
 
-    digit_images(index, FONT, TIME_FONT_SIZE, BGCOLOR, FGCOLOR)
-    index += 10
+    digit_images(INDEX, FONT, TIME_FONT_SIZE, BGCOLOR, FGCOLOR)
+    INDEX += 10
 
-    weekday_images(index, FONT, WEEKDAY_FONT_SIZE, BGCOLOR, FGCOLOR)
-    index += 7
+    weekday_images(INDEX, FONT, WEEKDAY_FONT_SIZE, BGCOLOR, FGCOLOR)
+    INDEX += 7
 
-    digit_images(index, FONT, DATE_FONT_SIZE, BGCOLOR, FGCOLOR)
-    index += 10
+    digit_images(INDEX, FONT, DATE_FONT_SIZE, BGCOLOR, FGCOLOR)
+    INDEX += 10
 
     with open("layout.json") as f:
-        layout_template = f.read()
+        LAYOUT_TEMPLATE = f.read()
         f.close()
-    layout = set_coordinates(layout_template, config)
+    layout = set_coordinates(LAYOUT_TEMPLATE, CONFIG)
     with open("out/layout.json", "w") as o:
         o.write(layout)
         o.close()
-    os.system("echo '" + str(config["version"]) + "' > out/version")
+    os.system("echo '" + str(CONFIG["version"]) + "' > out/version")
     os.system("map imgmkindexedpng *.png")
 
     #weather_images(100)
