@@ -81,11 +81,9 @@ def package_watchface(path_to_json):
         sys.exit(1)
     os.system("mono " + PACKAGER_BIN + " " + path_to_json)
 
-def cleanup_and_init():
+def cleanup():
     if os.path.exists("out"):
-        os.system("rm -rf out/*")
-    else:
-        os.mkdir("out")
+        os.system("rm -rf out")
     to_delete = [
         f for f in os.listdir(".") if f.endswith(".png") or f.endswith(".bup")]
     if "preview.png" in to_delete:
@@ -93,7 +91,8 @@ def cleanup_and_init():
     os.system("rm -f " + " ".join(to_delete))
 
 if __name__ == "__main__":
-    cleanup_and_init()
+    if not os.path.exists("out"):
+        os.mkdir("out")
 
     with open("config.json") as f:
         CONFIG = json.loads(f.read())
@@ -141,6 +140,8 @@ if __name__ == "__main__":
 
     package_watchface("out/layout.json")
 
+    BIN_OUT_NAME = "watchface.bin"
     os.system("cp out/layout_packed_static.png preview.png")
-    os.system("mv out/layout_packed.bin watchface.bin")
-    cleanup_and_init()
+    os.system("mv out/layout_packed.bin " + BIN_OUT_NAME)
+    cleanup()
+    print("Your watchface is '" + BIN_OUT_NAME + "'")
