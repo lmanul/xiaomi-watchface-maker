@@ -186,12 +186,12 @@ if __name__ == "__main__":
     BGCOLOR = CONFIG["background_color"]
     FGCOLOR = CONFIG["foreground_color"]
 
-    ts = time_separator_image(FONT, TIME_FONT_SIZE, BGCOLOR, FGCOLOR)
+    TS = time_separator_image(FONT, TIME_FONT_SIZE, BGCOLOR, FGCOLOR)
     # We need to overlay the time separator onto the background.
     CMD = ("convert "
            "-gravity center "
            "-composite "
-           "background/background.png " + ts + " "
+           "background/background.png " + TS + " "
            "background.png")
     os.system(CMD)
     copy_image_to_index("background.png", INDEX)
