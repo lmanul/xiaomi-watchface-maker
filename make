@@ -41,11 +41,13 @@ if __name__ == "__main__":
         digital.digit_images(INDEX, FONT, TIME_FONT_SIZE, BGCOLOR, FGCOLOR)
         INDEX += 10
 
-    common.weekday_images(INDEX, FONT, WEEKDAY_FONT_SIZE, BGCOLOR, FGCOLOR)
-    INDEX += 7
+    if CONFIG["show_weekday"]:
+        common.weekday_images(INDEX, FONT, WEEKDAY_FONT_SIZE, BGCOLOR, FGCOLOR)
+        INDEX += 7
 
-    digital.digit_images(INDEX, FONT, DATE_FONT_SIZE, BGCOLOR, FGCOLOR)
-    INDEX += 10
+    if CONFIG["show_date"]:
+        digital.digit_images(INDEX, FONT, DATE_FONT_SIZE, BGCOLOR, FGCOLOR)
+        INDEX += 10
 
     with open("layout.json") as f:
         LAYOUT_TEMPLATE = f.read()

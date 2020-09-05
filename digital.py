@@ -56,25 +56,27 @@ def set_coordinates(layout_string, config):
         i += 1
 
     # Weekdays
-    (w, h) = common.get_image_dimensions("out/0011.png")
-    x = config["weekday_x"]
-    y = config["weekday_y"]
-    if x == "left":
-        x = PADDING
-    if y == "bottom":
-        y = config["screen_height"] - h - PADDING
-    out = replace_layout_value("weekday_x", x, out)
-    out = replace_layout_value("weekday_y", y, out)
+    if config["show_weekday"]:
+        (w, h) = common.get_image_dimensions("out/0011.png")
+        x = config["weekday_x"]
+        y = config["weekday_y"]
+        if x == "left":
+            x = PADDING
+        if y == "bottom":
+            y = config["screen_height"] - h - PADDING
+        out = replace_layout_value("weekday_x", x, out)
+        out = replace_layout_value("weekday_y", y, out)
 
     # Date
-    (w, h) = common.get_image_dimensions("out/0018.png")
-    x = config["date_x"]
-    y = config["date_y"]
-    if x == "right":
-        x = config["screen_width"] - 2 * w - PADDING
-    if y == "bottom":
-        y = config["screen_height"] - h - PADDING
-    out = replace_layout_value("date_x", x, out)
-    out = replace_layout_value("date_y", y, out)
+    if config["show_date"]:
+        (w, h) = common.get_image_dimensions("out/0018.png")
+        x = config["date_x"]
+        y = config["date_y"]
+        if x == "right":
+            x = config["screen_width"] - 2 * w - PADDING
+        if y == "bottom":
+            y = config["screen_height"] - h - PADDING
+        out = replace_layout_value("date_x", x, out)
+        out = replace_layout_value("date_y", y, out)
 
     return out
